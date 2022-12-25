@@ -3,18 +3,15 @@ import random
 # Randomly picks an option from "Rock", "Paper" or "Scissors" for the computer
 def get_computer_choice():
     
-    computer_choice = random.choice(["Rock", "Paper", "Scissors"])
     # Return the computer's choice
-    return computer_choice
+    return random.choice(["Rock", "Paper", "Scissors"])
 
 # Ask the user for an input and return it
 def get_user_choice():
 
-    user_choice = input('Kindly choose between "Rock", "Paper" or "Scissors": ')
-    return user_choice
+    return input('Kindly choose between "Rock", "Paper" or "Scissors": ')
 
-# Choose a winner based on rules of Rock-Paper-Scissors.
-# Returns the winner.
+# Checks the user and computer choices and chooses a winner.
 def get_winner(computer_choice, user_choice):
     
     if computer_choice == "Rock" and user_choice == "Paper":
@@ -44,4 +41,9 @@ def get_winner(computer_choice, user_choice):
     elif computer_choice == "Scissors" and user_choice == "Rock":
         print("You won!")
 
+# Running the game
+def play():
+    user_choice = get_user_choice()
+    computer_choice = get_computer_choice()
 
+    return get_winner(computer_choice, user_choice)
