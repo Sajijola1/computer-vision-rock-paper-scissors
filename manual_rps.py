@@ -15,8 +15,8 @@ def get_user_choice():
 
 # Choose a winner based on rules of Rock-Paper-Scissors.
 # Returns the winner.
-def get_winner(computer_choice=get_computer_choice(), user_choice=get_user_choice()):
-
+def get_winner(computer_choice, user_choice):
+    
     if computer_choice == "Rock" and user_choice == "Paper":
         print("You won!")
     
