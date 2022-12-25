@@ -47,3 +47,5 @@ def play():
     computer_choice = get_computer_choice()
 
     return get_winner(computer_choice, user_choice)
+
+play()
