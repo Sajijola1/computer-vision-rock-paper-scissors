@@ -35,7 +35,7 @@ while True:
         # Return the computer's choice
         return random.choice(["Rock", "Paper", "Scissors"])
 
-    def get_user_choice():
+    def get_prediction():
         """Ask the user to choose between "Rock", "Paper" or "Scissors" as
         an input, and returns the user's choice
         
@@ -81,12 +81,9 @@ while True:
         elif computer_choice == "Scissors" and user_choice == "Rock":
             print("You won!")
 
-        else:
-            print("Choose an option")
-
     # Running the game
     def play():
-        user_choice = get_user_choice()
+        user_choice = get_prediction()
         # print(user_choice)
         computer_choice = get_computer_choice()
         # print(computer_choice)
