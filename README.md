@@ -26,13 +26,11 @@ The trained model files are saved in the repository as `keras_model.h5` and `lab
 - Here, the objective was creating a manual rock-paper-scissors game which prompts the user for an input and compares this to a random choice by the computer following the logic of the game.
 
 - All the steps in this stage were carried out without the camera. The random module was used to pick a choice for the computer;the user's was gotten using the built-in `input()` function. Two functions were used to achive the aforementioned steps: `get_computer_choice()` and `get_user_choice()`. The entire script was stored in the manual_rps.py file. A screenshsot of these functions is included below
-
-> ![alt text](Screenshots/Get_computer_choice%20and%20get_user_choice.png)
+![alt text](Screenshots/Get_computer_choice%20and%20get_user_choice.png)
 
 - Furthermore, a new function called `get_winner` was created to choose a winner based on the classic rules of Rock-Paper-Scissors game using if-elif-else statements. This function takes two arguments: `computer_choice` and `user_choice` and prints out a message depending on if the user wins, loses or draws with the computer.
 A screenshot of this function is included below
 ![Screenshot](Screenshots/Get_winner%20function.png)
 
 - Finally a last function called `play()` was defined within the script that calls all the functions defined earlier(get_computer_choice, get_user_choice, and get_winner). This function is then called to play a game of Rock-Paper-Scissors, and print out the winner.
-
 ![alt text](Screenshots/Play.png)
