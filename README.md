@@ -21,7 +21,8 @@ The trained model files are saved in the repository as `keras_model.h5` and `lab
 
 ## Milestone 3
 
-- This milestone was soley for creating the virtual environment and installing required dependencies. Furthermore, the model was tested to verify functionality
+- This stage was soley for creating the virtual environment and installing required dependencies/libraries. Furthermore, the model was tested to verify functionality and that it produces the desired output. The output of the model is stored in the `probabilities` variable as a list, and each element corresponds to the probability of the input image representing a particular class.
 
 ## Milestone 4
 
+- Here, the objective was creating a manual rock-paper-scissors game which prompts the user for an input and compares this to a random choice by the computer following the logic of the game.
