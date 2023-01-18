@@ -4,10 +4,10 @@ import cv2
 from keras.models import load_model
 import numpy as np
 model = load_model('keras_model.h5')
-cap = cv2.VideoCapture(0)
-data = np.ndarray(shape=(1, 224, 224, 3), dtype=np.float32)
-# Grab the labels from the labels.txt file. This will be used later.
-labels = open('labels.txt', 'r').readlines()
+# cap = cv2.VideoCapture(0)
+# data = np.ndarray(shape=(1, 224, 224, 3), dtype=np.float32)
+# # Grab the labels from the labels.txt file. This will be used later.
+# labels = open('labels.txt', 'r').readlines()
 # print(labels)
 
 def get_computer_choice():
@@ -20,37 +20,35 @@ def get_computer_choice():
     return random.choice(["Rock", "Paper", "Scissors"])
 
 def get_prediction():
-    # Store the start time
-    start_time = time.time()
+    # # Store the start time
+    # start_time = time.time()
+    # model = load_model('keras_model.h5')
+    cap = cv2.VideoCapture(0)
+    data = np.ndarray(shape=(1, 224, 224, 3), dtype=np.float32)
+    # Grab the labels from the labels.txt file. This will be used later.
+    labels = open('labels.txt', 'r').readlines()
 
     while True:
 
-        # Run for 7 secs
-        if (time.time() - start_time) < 7.00:
-            ret, frame = cap.read()
-            resized_frame = cv2.resize(frame, (224, 224), interpolation = cv2.INTER_AREA)
-            image_np = np.array(resized_frame)
-            normalized_image = (image_np.astype(np.float32) / 127.0) - 1 # Normalize the image
-            data[0] = normalized_image
-            
-            cv2.imshow('frame', frame)
-            # print("Please display a valid option to the camera") 
-            
-            # Have the model predict what the current image is. Model.predict
-            # returns an array of percentages. Example:[0.2,0.8] meaning its 20% sure
-            # it is the first label and 80% sure its the second label.
-            probabilities = model.predict(data)
-            # Print the label of the highest probability
-            prediction = labels[np.argmax(probabilities)]
-            # Remove the first two characters and newline from the label e.g '0 Rock\n'
-            prediction = prediction[2:-1]
-
-            # Press q to close the window
-            if (cv2.waitKey(1) & 0xFF == ord('q')):
-                break
+        ret, frame = cap.read()
+        resized_frame = cv2.resize(frame, (224, 224), interpolation = cv2.INTER_AREA)
+        image_np = np.array(resized_frame)
+        normalized_image = (image_np.astype(np.float32) / 127.0) - 1 # Normalize the image
+        data[0] = normalized_image
+    
+        cv2.imshow('frame', frame)
         
-        # Close the window after
-        else:
+        # Have the model predict what the current image is. Model.predict
+        # returns an array of percentages. Example:[0.2,0.8] meaning its 20% sure
+        # it is the first label and 80% sure its the second label.
+        probabilities = model.predict(data)
+        # Print the label of the highest probability
+        prediction = labels[np.argmax(probabilities)]
+        # Remove the first two characters and newline from the label e.g '0 Rock\n'
+        prediction = prediction[2:-1]
+
+        # Press q to close the window
+        if (cv2.waitKey(1) & 0xFF == ord('q')):
             break
 
     # After the loop release the cap object
@@ -61,7 +59,6 @@ def get_prediction():
 
 # Checks the user and computer choices and chooses a winner.
 def get_winner(computer_choice=str, user_choice=str):
-    #TODO Include a condition for when the user chooses nothing (Resolved)
 
     if computer_choice == "Rock":
         print(f"You chose {user_choice}")
@@ -142,9 +139,15 @@ def countdown_timer(countdown_time):
 
 # Running the game
 def play():
-    #TODO fix OpenCV error in line 31
+    # TODO fix OpenCV error in line 31
     # cv2.error: OpenCV(4.6.0) /io/opencv/modules/imgproc/src/resize.cpp:4052: 
     # error: (-215:Assertion failed) !ssize.empty() in function 'resize'
+
+    # RESOLUTION: Stop the capture when the game ends (wrong)
+
+    # RESOLUTION: Start the capture in the get_prediction() function
+
+    # TODO: Include condition for when rounds_played >= 5
 
     # Store number of user and computer wins
     computer_wins = 0
@@ -153,39 +156,36 @@ def play():
     # store number of rounds played
     rounds_played = 0    
     
-    while (user_wins or computer_wins) < 3:
+    while (user_wins and computer_wins) < 3 and rounds_played < 5:
 
         user_choice = get_prediction()
         computer_choice = get_computer_choice()
         
         winner = get_winner(computer_choice, user_choice)
         
-        if rounds_played >= 5:
-            break
+        if winner == "Computer":
+            # Increase the count for the rounds played
+            rounds_played += 1
+            # Add to the number of computer wins
+            computer_wins += 1 
+            input("press Enter to play again... ")    
+        
+        elif winner == "User":
+            # Increase the count for the rounds played
+            rounds_played += 1
+            # Add to the number of user wins
+            user_wins += 1     
+            input("press Enter to play again... ")
+
+        elif winner == "Tie":
+            # Increase the count for the rounds played
+            rounds_played += 1
+            input("press Enter to play again... ")
 
         else:
-            if winner == "Computer":
-                # Increase the count for the rounds played
-                rounds_played += 1
-                # Add to the number of computer wins
-                computer_wins += 1     
-            
-            elif winner == "User":
-                # Increase the count for the rounds played
-                rounds_played += 1
-                # Add to the number of user wins
-                user_wins += 1     
-                input("press Enter to play again... ")
-
-            elif winner == "Tie":
-                # Increase the count for the rounds played
-                rounds_played += 1
-                input("press Enter to play again... ")
-
-            else:
-                print("You did not choose an option, please try again...")
-                # Increase the count for the rounds played
-                rounds_played += 1
-                input("press Enter to play again... ")
+            print("You did not choose an option, please try again...")
+            # Increase the count for the rounds played
+            rounds_played += 1
+            input("press Enter to play again... ")
 
 play()
