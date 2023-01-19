@@ -1,13 +1,15 @@
 import time
 import random
 import cv2
+import os
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = '3'
 from keras.models import load_model
 import numpy as np
 model = load_model('keras_model.h5')
-# cap = cv2.VideoCapture(0)
-# data = np.ndarray(shape=(1, 224, 224, 3), dtype=np.float32)
-# # Grab the labels from the labels.txt file. This will be used later.
-# labels = open('labels.txt', 'r').readlines()
+cap = cv2.VideoCapture(0)
+data = np.ndarray(shape=(1, 224, 224, 3), dtype=np.float32)
+# Grab the labels from the labels.txt file. This will be used later.
+labels = open('labels.txt', 'r').readlines()
 # print(labels)
 
 def get_computer_choice():
@@ -22,11 +24,6 @@ def get_computer_choice():
 def get_prediction():
     # # Store the start time
     # start_time = time.time()
-    # model = load_model('keras_model.h5')
-    cap = cv2.VideoCapture(0)
-    data = np.ndarray(shape=(1, 224, 224, 3), dtype=np.float32)
-    # Grab the labels from the labels.txt file. This will be used later.
-    labels = open('labels.txt', 'r').readlines()
 
     while True:
 
@@ -51,10 +48,10 @@ def get_prediction():
         if (cv2.waitKey(1) & 0xFF == ord('q')):
             break
 
-    # After the loop release the cap object
-    cap.release()
-    # Destroy all the windows
-    cv2.destroyAllWindows() 
+    # # After the loop release the cap object
+    # cap.release()
+    # # Destroy all the windows
+    # cv2.destroyAllWindows() 
     return prediction
 
 # Checks the user and computer choices and chooses a winner.
@@ -73,7 +70,8 @@ def get_winner(computer_choice=str, user_choice=str):
             print("It is a tie!") 
             winner = "Tie"
         else:
-            winner = None 
+            winner = None
+            print("Please show a valid choice to the camera...") 
     
     elif computer_choice == "Paper":
         print(f"You chose {user_choice}")
@@ -89,6 +87,7 @@ def get_winner(computer_choice=str, user_choice=str):
             winner = "Computer"
         else:
             winner = None
+            print("Please show a valid choice to the camera...")
 
     elif computer_choice == "Scissors":
         print(f"You chose {user_choice}")
@@ -104,6 +103,7 @@ def get_winner(computer_choice=str, user_choice=str):
             winner = "User"
         else:
             winner = None
+            print("Please show a valid choice to the camera...")
 
     return winner
 
@@ -147,8 +147,6 @@ def play():
 
     # RESOLUTION: Start the capture in the get_prediction() function
 
-    # TODO: Include condition for when rounds_played >= 5
-
     # Store number of user and computer wins
     computer_wins = 0
     user_wins = 0
@@ -156,36 +154,60 @@ def play():
     # store number of rounds played
     rounds_played = 0    
     
-    while (user_wins and computer_wins) < 3 and rounds_played < 5:
+    while True:
 
-        user_choice = get_prediction()
-        computer_choice = get_computer_choice()
-        
-        winner = get_winner(computer_choice, user_choice)
-        
-        if winner == "Computer":
-            # Increase the count for the rounds played
-            rounds_played += 1
-            # Add to the number of computer wins
-            computer_wins += 1 
-            input("press Enter to play again... ")    
-        
-        elif winner == "User":
-            # Increase the count for the rounds played
-            rounds_played += 1
-            # Add to the number of user wins
-            user_wins += 1     
-            input("press Enter to play again... ")
+        if (user_wins and computer_wins) < 3 and rounds_played < 5:
+            user_choice = get_prediction()
+            computer_choice = get_computer_choice()
+            
+            winner = get_winner(computer_choice, user_choice)
+            
+            if winner == "Computer":
+                # Increase the count for the rounds played
+                rounds_played += 1
+                # Add to the number of computer wins
+                computer_wins += 1 
+                input("press Enter to play again... ")    
+            
+            elif winner == "User":
+                # Increase the count for the rounds played
+                rounds_played += 1
+                # Add to the number of user wins
+                user_wins += 1     
+                input("press Enter to play again... ")
 
-        elif winner == "Tie":
-            # Increase the count for the rounds played
-            rounds_played += 1
-            input("press Enter to play again... ")
+            elif winner == "Tie":
+                # Increase the count for the rounds played
+                rounds_played += 1
+                input("press Enter to play again... ")
+
+            else:
+                print("You did not choose an option, please try again...")
+                # Increase the count for the rounds played
+                rounds_played += 1
+                input("press Enter to play again... ")
 
         else:
-            print("You did not choose an option, please try again...")
-            # Increase the count for the rounds played
-            rounds_played += 1
-            input("press Enter to play again... ")
+            
+            # Display the overall winner
+            replay = input("Would you like to play again(y/n): ").lower()
+
+            if replay == "y":
+                if computer_wins > user_wins:
+                    print("Game over, Computer wins")
+                    break
+                elif computer_wins == user_wins:
+                    print("Game over /n You drew with the computer")
+                else:
+                    print("Game over, You win!")
+                    break
+            else:
+                print("Thanks for playing")
+                break
+    # Release the cap object
+    cap.release()
+    # Destroy all the windows
+    cv2.destroyAllWindows()
+
 
 play()
