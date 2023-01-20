@@ -152,8 +152,8 @@ def play():
     user_wins = 0
 
     # store number of rounds played
-    rounds_played = 0    
-    
+    rounds_played = 0 
+
     while True:
 
         if (user_wins and computer_wins) < 3 and rounds_played < 5:
@@ -192,17 +192,21 @@ def play():
             # Display the overall winner
             replay = input("Would you like to play again(y/n): ").lower()
 
-            if replay == "y":
+            if replay == "n":
                 if computer_wins > user_wins:
                     print("Game over, Computer wins")
+                    print("Thanks for playing")
                     break
                 elif computer_wins == user_wins:
-                    print("Game over /n You drew with the computer")
+                    print("Game over\n You drew with the computer")
+                    print("Thanks for playing")
+                    break
                 else:
                     print("Game over, You win!")
+                    print("Thanks for playing")
                     break
             else:
-                print("Thanks for playing")
+                play()  # Use recursion to start the game again
                 break
     # Release the cap object
     cap.release()
