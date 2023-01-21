@@ -80,9 +80,9 @@ def get_prediction():
         image_np = np.array(resized_frame)
         normalized_image = (image_np.astype(np.float32) / 127.0) - 1 # Normalize the image
         data[0] = normalized_image
-    
+
         cv2.imshow('frame', frame)
-        
+
         # Have the model predict what the current image is
         probabilities = model.predict(data)
         # Print the label of the highest probability
@@ -151,49 +151,49 @@ def get_winner(computer_choice=str, user_choice=str):
 
 # Running the game
 def play():
-    
+
     # Store number of user and computer wins
     computer_wins = 0
     user_wins = 0
 
     # store number of rounds played
-    rounds_played = 0 
+    rounds_played = 0
 
     while True:
 
         if (user_wins and computer_wins) < 3 and rounds_played < 5:
             user_choice = get_prediction()
             computer_choice = get_computer_choice()
-            
+
             winner = get_winner(computer_choice, user_choice)
-            
+
             if winner == "Computer":
                 # Increase the count for the rounds played
                 rounds_played += 1
                 # Add to the number of computer wins
-                computer_wins += 1 
-                input("press Enter to play again... ")    
-            
+                computer_wins += 1
+                input("press Enter to continue... ")
+
             elif winner == "User":
                 # Increase the count for the rounds played
                 rounds_played += 1
                 # Add to the number of user wins
-                user_wins += 1     
-                input("press Enter to play again... ")
+                user_wins += 1
+                input("press Enter to continue... ")
 
             elif winner == "Tie":
                 # Increase the count for the rounds played
                 rounds_played += 1
-                input("press Enter to play again... ")
+                input("press Enter to continue... ")
 
             else:
                 print("You did not choose an option, please try again...")
                 # Increase the count for the rounds played
                 rounds_played += 1
-                input("press Enter to play again... ")
+                input("press Enter to continue... ")
 
         else:
-            
+
             # Display the overall winner
             replay = input("Would you like to play again(y/n): ").lower()
 
@@ -213,11 +213,10 @@ def play():
             else:
                 play()  # Use recursion to start the game again
                 break
-    
+
     # Release the cap object when game ends
     cap.release()
     # Destroy all the windows
     cv2.destroyAllWindows()
-
 
 play()
