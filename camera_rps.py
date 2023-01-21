@@ -1,8 +1,9 @@
+import os
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = '3'
+
 import time
 import random
 import cv2
-import os
-os.environ["TF_CPP_MIN_LOG_LEVEL"] = '3'
 from keras.models import load_model
 import numpy as np
 model = load_model('keras_model.h5')
@@ -13,17 +14,64 @@ labels = open('labels.txt', 'r').readlines()
 # print(labels)
 
 def get_computer_choice():
-    """Randomly picks an option from "Rock", "Paper" or "Scissors" for the computer
+    """
+    Randomly picks an option from "Rock", "Paper" or "Scissors" for the computer
+    
     and returns the computer's choice.
     
-    Arguments: None"""
+    Arguments:
+    ---
+    None
+    """
     
     # Return the computer's choice
     return random.choice(["Rock", "Paper", "Scissors"])
 
+def countdown_timer(countdown_time, message1=str, message2=str):
+    """ 
+        A simple timer that implements a countdown in python without using the time.sleep() funciton.
+    
+        Takes the countown duration in seconds and two messages as arguments.
+    
+    Prints:
+    -------
+        The first message before the countdown starts,
+        
+        Each elapsed second during the countdown and 
+        
+        The final message at the end of the countdown
+    
+    """
+
+    # Create a counter variable. We don't want this to be in the while loop or it resets back to 0 with each iteration 
+    count = 0
+    
+    # Inform the user of the countdown
+    print(message1)
+    
+    # Store the start time
+    start_time = time.time()
+    
+    while True:
+        # After 1 sec
+        if (time.time() - start_time) == 1.00:
+            # Reset the start time
+            start_time = time.time()
+
+            # Check if the count is equal to the maximum time specified
+            if count == countdown_time:     # quicker condition
+                break   # break out of the loop
+            print(f"{countdown_time - count}!")
+            # Add 1 to the count
+            count += 1
+    
+    # Print prompt
+    print(message2)
+
 def get_prediction():
-    # # Store the start time
-    # start_time = time.time()
+
+    # Call the Countdown function with messages for the game
+    countdown_timer(3,"Get ready", "Display your choice to the camera")
 
     while True:
 
@@ -35,9 +83,7 @@ def get_prediction():
     
         cv2.imshow('frame', frame)
         
-        # Have the model predict what the current image is. Model.predict
-        # returns an array of percentages. Example:[0.2,0.8] meaning its 20% sure
-        # it is the first label and 80% sure its the second label.
+        # Have the model predict what the current image is
         probabilities = model.predict(data)
         # Print the label of the highest probability
         prediction = labels[np.argmax(probabilities)]
@@ -48,10 +94,6 @@ def get_prediction():
         if (cv2.waitKey(1) & 0xFF == ord('q')):
             break
 
-    # # After the loop release the cap object
-    # cap.release()
-    # # Destroy all the windows
-    # cv2.destroyAllWindows() 
     return prediction
 
 # Checks the user and computer choices and chooses a winner.
@@ -107,46 +149,9 @@ def get_winner(computer_choice=str, user_choice=str):
 
     return winner
 
-def countdown_timer(countdown_time):
-    """ A simple timer that implements a countdown in python without using the time.sleep() funciton.
-    Takes the countown duration in seconds as an argument.
-    Prints each second of execution to the console and prints a prompt at the end of the countdown"""
-
-    # Create a counter variable. We don't want this to be in the while loop or it resets back to 0 with each iteration 
-    count = 0
-    
-    # Inform the user of the countdown
-    print("Starting Countdown")
-    
-    # Store the start time
-    start_time = time.time()
-    
-    while True:
-        # After 1 sec
-        if (time.time() - start_time) == 1.00:
-            # Reset the start time
-            start_time = time.time()
-
-            # Check if the count is equal to the maximum time specified
-            if count == countdown_time:     # quicker condition
-                break   # break out of the loop
-            print(f"{countdown_time - count}!")
-            # Add 1 to the count
-            count += 1
-    
-    # Print prompt
-    print("Go! ")
-
 # Running the game
 def play():
-    # TODO fix OpenCV error in line 31
-    # cv2.error: OpenCV(4.6.0) /io/opencv/modules/imgproc/src/resize.cpp:4052: 
-    # error: (-215:Assertion failed) !ssize.empty() in function 'resize'
-
-    # RESOLUTION: Stop the capture when the game ends (wrong)
-
-    # RESOLUTION: Start the capture in the get_prediction() function
-
+    
     # Store number of user and computer wins
     computer_wins = 0
     user_wins = 0
@@ -208,7 +213,8 @@ def play():
             else:
                 play()  # Use recursion to start the game again
                 break
-    # Release the cap object
+    
+    # Release the cap object when game ends
     cap.release()
     # Destroy all the windows
     cv2.destroyAllWindows()
