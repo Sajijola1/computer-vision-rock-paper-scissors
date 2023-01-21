@@ -197,7 +197,11 @@ def play():
             # Display the overall winner
             replay = input("Would you like to play again(y/n): ").lower()
 
-            if replay == "n":
+            if replay == "y":
+                play()  # Use recursion to start the game again
+                break
+
+            else:
                 if computer_wins > user_wins:
                     print("Game over, Computer wins")
                     print("Thanks for playing")
@@ -210,9 +214,6 @@ def play():
                     print("Game over, You win!")
                     print("Thanks for playing")
                     break
-            else:
-                play()  # Use recursion to start the game again
-                break
 
     # Release the cap object when game ends
     cap.release()
