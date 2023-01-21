@@ -71,7 +71,7 @@ def countdown_timer(countdown_time, message1=str, message2=str):
 def get_prediction():
 
     # Call the Countdown function with messages for the game
-    countdown_timer(3,"Get ready", "Display your choice to the camera")
+    # countdown_timer(3,"Get ready", "Display your choice to the camera")
 
     while True:
 
