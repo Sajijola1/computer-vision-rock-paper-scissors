@@ -161,41 +161,41 @@ def play():
 
     while True:
 
-        if (user_wins and computer_wins) < 3 and rounds_played < 5:
-            user_choice = get_prediction()
-            computer_choice = get_computer_choice()
+        user_choice = get_prediction()
+        computer_choice = get_computer_choice()
 
-            winner = get_winner(computer_choice, user_choice)
+        winner = get_winner(computer_choice, user_choice)
 
-            if winner == "Computer":
-                # Increase the count for the rounds played
-                rounds_played += 1
-                # Add to the number of computer wins
-                computer_wins += 1
-                input("press Enter to continue... ")
+        if winner == "Computer":
+            # Increase the count for the rounds played
+            rounds_played += 1
+            # Add to the number of computer wins
+            computer_wins += 1
+            input("press Enter to continue... ")
 
-            elif winner == "User":
-                # Increase the count for the rounds played
-                rounds_played += 1
-                # Add to the number of user wins
-                user_wins += 1
-                input("press Enter to continue... ")
+        elif winner == "User":
+            # Increase the count for the rounds played
+            rounds_played += 1
+            # Add to the number of user wins
+            user_wins += 1
+            input("press Enter to continue... ")
 
-            elif winner == "Tie":
-                # Increase the count for the rounds played
-                rounds_played += 1
-                input("press Enter to continue... ")
-
-            else:
-                print("You did not choose an option, please try again...")
-                # Increase the count for the rounds played
-                rounds_played += 1
-                input("press Enter to continue... ")
+        elif winner == "Tie":
+            # Increase the count for the rounds played
+            rounds_played += 1
+            input("press Enter to continue... ")
 
         else:
+            print("You did not choose an option, please try again...")
+            # Increase the count for the rounds played
+            rounds_played += 1
+            input("press Enter to continue... ")
+
+        
+        if (user_wins or computer_wins) >= 3 or rounds_played >= 5:
 
             # Display the overall winner
-            replay = input("Would you like to play again(y/n): ").lower()
+            replay = input("Game over, Would you like to play again(y/n): ").lower()
 
             if replay == "y":
                 play()  # Use recursion to start the game again
@@ -203,15 +203,15 @@ def play():
 
             else:
                 if computer_wins > user_wins:
-                    print("Game over, Computer wins")
+                    print("Computer wins!")
                     print("Thanks for playing")
                     break
                 elif computer_wins == user_wins:
-                    print("Game over\n You drew with the computer")
+                    print("You drew with the computer")
                     print("Thanks for playing")
                     break
                 else:
-                    print("Game over, You win!")
+                    print("You win!")
                     print("Thanks for playing")
                     break
 
