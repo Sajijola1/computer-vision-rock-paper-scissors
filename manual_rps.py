@@ -1,7 +1,19 @@
 import random
 
 # Randomly picks an option from "Rock", "Paper" or "Scissors" for the computer
-get_computer_choice = lambda : random.choice(["Rock", "Paper", "Scissors"])
+def get_computer_choice():
+    """
+    Randomly picks an option from "Rock", "Paper" or "Scissors" for the computer
+    
+    and returns the computer's choice.
+    
+    Arguments:
+    ---
+    None
+    """
+    
+    # Return the computer's choice
+    return random.choice(["Rock", "Paper", "Scissors"])
 
 
 # Ask the user for an input and return it
