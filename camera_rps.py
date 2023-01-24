@@ -15,12 +15,21 @@ class RockPaperScissors():
         self.data = np.ndarray(shape=(1, 224, 224, 3), dtype=np.float32)
         # Grab the labels from the labels.txt file. This will be used later.
         self.labels = open('labels.txt', 'r').readlines()
-        # print(labels)
 
-
-
-    # Use a lambda function to get random computer choice
-    get_computer_choice = lambda self: random.choice(["Rock", "Paper", "Scissors"])
+    # Randomly picks an option from "Rock", "Paper" or "Scissors" for the computer
+    def get_computer_choice(self):
+        """
+        Randomly picks an option from "Rock", "Paper" or "Scissors" for the computer
+        
+        and returns the computer's choice.
+        
+        Arguments:
+        ---
+        None
+        """
+        
+        # Return the computer's choice
+        return random.choice(["Rock", "Paper", "Scissors"])
 
     def countdown_timer(self, countdown_time, message1=str, message2=str):
         """ 
@@ -64,47 +73,55 @@ class RockPaperScissors():
         print(message2)
 
     def get_prediction(self, countdown_time):
-        
-        # Inform the user of the countdown
-        # print(message1)
 
         while True:
 
             ret, frame = self.cap.read()
+            cv2.putText(frame,
+            "Press 'w' to start", (0, 35),
+            cv2.FONT_HERSHEY_SIMPLEX, 1.0, (0, 255, 255),
+            4, cv2.LINE_4)
             cv2.imshow('frame', frame)
 
-            # Store the start time
-            start_time = time.time()
+            # check for key press
+            k = cv2.waitKey(1)
 
-            resized_frame = cv2.resize(frame, (224, 224), interpolation = cv2.INTER_AREA)
-            image_np = np.array(resized_frame)
-            normalized_image = (image_np.astype(np.float32) / 127.0) - 1 # Normalize the image
-            self.data[0] = normalized_image
+            # save the countdown timer to a new variable
+            timer = countdown_time
 
-            while (countdown_time) > 0:
-                ret, frame = self.cap.read()
-                cv2.putText(frame, 
-                "Display your choice to the camera and press 'q' \nTime left: " 
-                + str(countdown_time), (0, 35), 
-                cv2.FONT_HERSHEY_SIMPLEX, 1.0, (0, 255, 255), cv2.LINE_4)
-                cv2.imshow('frame', frame)
+            # begin the countdown when w is pressed
+            if k == ord('w'):
+                start_time = time.time()
 
-                cur = time.time()
-                
-                if cur-start_time >= 1:    
-                    start_time = cur
-                    countdown_time -= 1
+                while (timer) > 0:
+                    ret, frame = self.cap.read()
+                    resized_frame = cv2.resize(frame, (224, 224), interpolation = cv2.INTER_AREA)
+                    image_np = np.array(resized_frame)
+                    normalized_image = (image_np.astype(np.float32) / 127.0) - 1 # Normalize the image
+                    self.data[0] = normalized_image
+                    
+                    cv2.putText(frame,
+                    "Time Left: " + str(timer), (0, 35),
+                    cv2.FONT_HERSHEY_SIMPLEX, 1.0, (0, 255, 255),
+                    4, cv2.LINE_4)
+                    cv2.imshow('frame', frame)
+                    cv2.waitKey(1)
+
+                    cur = time.time()
+                    
+                    if cur-start_time >= 1:    
+                        start_time = cur
+                        timer -= 1
             
+                    # Have the model predict what the current image is
+                    probabilities = self.model.predict(self.data)
+                    # Print the label of the highest probability
+                    prediction = self.labels[np.argmax(probabilities)]
+                    # Remove the first two characters and newline from the label e.g '0 Rock\n'
+                    prediction = prediction[2:-1]
 
-            # Have the model predict what the current image is
-            probabilities = self.model.predict(self.data)
-            # Print the label of the highest probability
-            prediction = self.labels[np.argmax(probabilities)]
-            # Remove the first two characters and newline from the label e.g '0 Rock\n'
-            prediction = prediction[2:-1]
-
-            # Press q to close the window
-            if (cv2.waitKey(1) & 0xFF == ord('q')):
+            # Press q to break the loop
+            elif k == ord('q'):
                 break
 
         return prediction
