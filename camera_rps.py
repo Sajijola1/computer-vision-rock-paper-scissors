@@ -15,6 +15,7 @@ class RockPaperScissors():
         self.data = np.ndarray(shape=(1, 224, 224, 3), dtype=np.float32)
         # Grab the labels from the labels.txt file. This will be used later.
         self.labels = open('labels.txt', 'r').readlines()
+        self.prompt = None  # Variable to check key presses
 
     # Randomly picks an option from "Rock", "Paper" or "Scissors" for the computer
     def get_computer_choice(self):
@@ -84,13 +85,13 @@ class RockPaperScissors():
             cv2.imshow('frame', frame)
 
             # check for key press
-            k = cv2.waitKey(1)
+            self.prompt = cv2.waitKey(1)
 
             # save the countdown timer to a new variable
             timer = countdown_time
 
             # begin the countdown when w is pressed
-            if k == ord('w'):
+            if self.prompt == ord('w'):
                 start_time = time.time()
 
                 while (timer) > 0:
@@ -120,8 +121,14 @@ class RockPaperScissors():
                     # Remove the first two characters and newline from the label e.g '0 Rock\n'
                     prediction = prediction[2:-1]
 
+                # cv2.putText(frame,
+                # "Press 'q'", (0, 35),
+                # cv2.FONT_HERSHEY_SIMPLEX, 1.0, (0, 255, 255),
+                # 4, cv2.LINE_4)
+                # cv2.imshow('frame', frame)
+
             # Press q to break the loop
-            elif k == ord('q'):
+            elif self.prompt == ord('q'):
                 break
 
         return prediction
@@ -235,7 +242,7 @@ class RockPaperScissors():
                     break
 
                 # Display the overall winner
-                else:
+                elif replay == "n":
                     if computer_wins > user_wins:
                         print("Computer wins!")
                         print("Thanks for playing")
@@ -248,11 +255,18 @@ class RockPaperScissors():
                         print("You win!")
                         print("Thanks for playing")
                         break
+                
+                # # Include condition for invalid inputs
+                # else:
+                #     print(f"You entered {replay}, Please enter a valid option") 
+                #     replay = input("Would you like to play again?(y/n): ").lower()
 
         # Release the cap object when game ends
         self.cap.release()
         # Destroy all the windows
         cv2.destroyAllWindows()
 
+# Create an object of the Rock Paper Scissors class
 Player1 = RockPaperScissors()
+# Play the game
 Player1.play()
