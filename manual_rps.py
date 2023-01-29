@@ -25,39 +25,39 @@ def get_user_choice():
 def get_winner(computer_choice, user_choice):
     
     if computer_choice == "Rock" and user_choice == "Paper":
-        print("Computer chose Rock")
+        # print("Computer chose Rock")
         print("You won!")
     
     elif computer_choice == "Rock" and user_choice == "Scissors":
-        print("Computer chose Rock")
+        # print("Computer chose Rock")
         print("You lost")
     
     elif computer_choice == "Rock" and user_choice == "Rock":
-        print("Computer chose Rock")
+        # print("Computer chose Rock")
         print("It is a tie!")
     
     elif computer_choice == "Paper" and user_choice == "Paper":
-        print("Computer chose Paper")
+        # print("Computer chose Paper")
         print("It is a tie!")
     
     elif computer_choice == "Paper" and user_choice == "Scissors":
-        print("Computer chose Paper")
+        # print("Computer chose Paper")
         print("You won!")
         
     elif computer_choice == "Paper" and user_choice == "Rock":
-        print("Computer chose Paper")
+        # print("Computer chose Paper")
         print("You lost")
 
     elif computer_choice == "Scissors" and user_choice == "Paper":
-        print("Computer chose Scissors")
+        # print("Computer chose Scissors")
         print("You lost")
     
     elif computer_choice == "Scissors" and user_choice == "Scissors":
-        print("Computer chose Scissors ")
+        # print("Computer chose Scissors ")
         print("It is a tie!")
         
     elif computer_choice == "Scissors" and user_choice == "Rock":
-        print("Computer chose Scissors")
+        # print("Computer chose Scissors")
         print("You won!")
 
 # Running the game
